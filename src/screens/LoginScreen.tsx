@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Button, Image, StyleSheet, Text, TextInput, View, SafeAreaView} from 'react-native';
+import {Button, Image, StyleSheet, Text, TextInput, View, SafeAreaView, Keyboard} from 'react-native';
 import {RootStackParamList} from '../../Main'
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import * as actions from '../actions'
@@ -17,21 +17,35 @@ type Props = PropsNav & PropsRedux
 const LoginScreen:FC<Props> = (props) => {
     const [username, setUsername] = useState('john.doe@nfq.lt');
     const [password, setPassword] = useState('johndoe');
+    const [keyboardStatus, setKeyboardStatus] = useState("Keyboard Hidden");
 
+    useEffect(() => {
+      const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+        setKeyboardStatus("Keyboard Shown");
+      });
+      const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+        setKeyboardStatus("Keyboard Hidden");
+      });
+  
+      return () => {
+        showSubscription.remove();
+        hideSubscription.remove();
+      };
+    }, []);
 
     const authenticate = async () => {
         props.dispatchActions.postAuth(username,password)
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex: keyboardStatus=='Keyboard Hidden'? 1:0.2}}>
             <View style={styles.container}>
                 <Image
                     style={{width:'50%',height:'30%'}}
                     source = {{uri: "https://placeimg.com/80/80/tech"}}
                 />
                 <View style = {styles.errorContainer}>
-                    <Text>{ props.state.authReducer.error}</Text>
+                    <Text numberOfLines={3}>{ props.state.authReducer.error}</Text>
 
                 </View>
                 <View style = {styles.form}>
@@ -76,6 +90,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     errorContainer: {
+        padding:6,
+        height:'10%',
         alignItems: "center",
         marginTop:30,
     },
@@ -93,8 +109,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     input: {
+        width:'100%',
+        padding:5,
         height: 40,
         fontSize: 15,
-        color: "#161F3D"
+        color: "#161F3D",
+        
     },
 });
