@@ -52,7 +52,7 @@ const Main:FC<Props> = (props) => {
                         />
                     </RootStack.Navigator>
                 ) : (
-                    <RootStack.Navigator initialRouteName="LoginScreen" screenOptions = {{headerShown: false}}>
+                    <RootStack.Navigator initialRouteName='ProfileScreen' screenOptions = {{headerShown: false}}>
                         <RootStack.Screen
                             name="ProfileScreen"
                             component={ProfileScreen}
