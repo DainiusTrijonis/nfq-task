@@ -3,9 +3,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen'
 import ProfileScreen from './src/screens/ProfileScreen'
-
 import * as actions from './src/actions'
-
 import { connect } from 'react-redux';
 import {Dispatch,bindActionCreators} from 'redux'
 import { allReducersState } from './src/reducers';
@@ -41,7 +39,6 @@ const Main:FC<Props> = (props) => {
         return <SplashScreen/>;
     }
     else {
-        
         return (
             <NavigationContainer>
                 {props.state.authReducer.auth == null ? (
@@ -81,7 +78,3 @@ export const mapDispatchToProps = (dispatch:Dispatch) => {
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Main)
-
-
-
-//export default Main

@@ -1,5 +1,5 @@
-import React, { FC, useEffect,  useState} from 'react';
-import {Button, Image, StyleSheet, Text, View, SafeAreaView, Dimensions} from 'react-native';
+import React, { FC, useEffect} from 'react';
+import {Button, Image, StyleSheet, Text, View, SafeAreaView} from 'react-native';
 import {RootStackParamList} from '../../Main'
 import { NativeStackScreenProps} from '@react-navigation/native-stack';
 import { allReducersState } from '../reducers/index'

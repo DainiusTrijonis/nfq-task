@@ -1,4 +1,4 @@
-import { SET_AUTH, POST_AUTH_FAILURE, LOGOUT_DISPATCH } from '../actions/actionTypes'
+import { SET_AUTH, POST_AUTH_FAILURE} from '../actions/actionTypes'
 export interface Auth {
     token:string,
     refreshToken:string,
