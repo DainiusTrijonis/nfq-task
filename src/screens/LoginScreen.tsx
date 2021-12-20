@@ -15,8 +15,8 @@ type PropsRedux = {
 type Props = PropsNav & PropsRedux
 
 const LoginScreen:FC<Props> = (props) => {
-    const [username, setUsername] = useState('john.doe@nfq.lt');
-    const [password, setPassword] = useState('johndoe');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     let _usernameInput:TextInput|null;
     let _passwordInput:TextInput|null;
 

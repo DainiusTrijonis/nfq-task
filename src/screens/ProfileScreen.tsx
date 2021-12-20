@@ -36,7 +36,6 @@ const ProfileScreen:FC<Props> = (props) => {
         if(userObj) {
             return (
                 <View style={styles.profileContainer}>
-                    <Text style={styles.text}>{orientation}</Text>
                     <Image                  
                         style={ orientation == 'PORTRAIT'? { height:'70%', width:'90%'}: {height:'60%', width:'100%'} }
                         source = {{uri: userObj.image}}
