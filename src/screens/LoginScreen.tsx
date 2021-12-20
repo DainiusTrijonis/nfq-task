@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useState} from 'react';
-import {Button, Image, StyleSheet, Text, TextInput, View, SafeAreaView, Keyboard} from 'react-native';
+import React, {FC, useState} from 'react';
+import {Button, Image, StyleSheet, Text, TextInput, View, SafeAreaView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback} from 'react-native';
 import {RootStackParamList} from '../../Main'
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import * as actions from '../actions'
@@ -17,56 +17,56 @@ type Props = PropsNav & PropsRedux
 const LoginScreen:FC<Props> = (props) => {
     const [username, setUsername] = useState('john.doe@nfq.lt');
     const [password, setPassword] = useState('johndoe');
-    const [keyboardStatus, setKeyboardStatus] = useState("Keyboard Hidden");
-
-    useEffect(() => {
-      const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-        setKeyboardStatus("Keyboard Shown");
-      });
-      const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-        setKeyboardStatus("Keyboard Hidden");
-      });
-  
-      return () => {
-        showSubscription.remove();
-        hideSubscription.remove();
-      };
-    }, []);
+    let _usernameInput:TextInput|null;
+    let _passwordInput:TextInput|null;
 
     const authenticate = async () => {
         props.dispatchActions.postAuth(username,password)
     }
 
-    return (
-        <SafeAreaView style={{flex: keyboardStatus=='Keyboard Hidden'? 1:0.2}}>
-            <View style={styles.container}>
-                <Image
-                    style={{width:'50%',height:'30%'}}
-                    source = {{uri: "https://placeimg.com/80/80/tech"}}
-                />
-                <View style = {styles.errorContainer}>
-                    <Text numberOfLines={3}>{ props.state.authReducer.error}</Text>
+    const next = () => {
+        _passwordInput && _passwordInput.focus();
+    };
 
-                </View>
-                <View style = {styles.form}>
-                    <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} autoCapitalize="none" placeholder="Username"
-                            onChangeText = {username => setUsername(username)}
-                            value = {username}
+
+    return (
+        <SafeAreaView style={{flex:1}}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.container}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.inner}>
+                        <Image
+                            style={{width:'100%',height:'40%'}}
+                            source = {{uri: "https://placeimg.com/80/80/tech"}}
                         />
+                        <View style={styles.errorContainer}>
+                            <Text numberOfLines={3}>{ props.state.authReducer.error}</Text>
+                        </View>
+                        <View>
+                            <TextInput placeholder="Username" autoCapitalize="none" style={styles.textInput} 
+                                onChangeText = {username => setUsername(username)}
+                                value = {username}
+                                ref={ref => {_usernameInput = ref}}
+                                onSubmitEditing={next}
+                            />
+                            <TextInput secureTextEntry autoCapitalize="none" placeholder="Password" style={styles.textInput} 
+                                onChangeText = {password => setPassword(password)}
+                                value = {password}
+                                ref={ref => {_passwordInput = ref}}
+                                onSubmitEditing = {authenticate}
+                            />
+                        </View>
+                        <View style={styles.btnContainer}>
+                            <Button 
+                                title = "Submit"
+                                onPress ={ () => authenticate()}
+                            />
+                        </View>
                     </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} secureTextEntry autoCapitalize="none" placeholder="Password"
-                            onChangeText = {password => setPassword(password)}
-                            value = {password}
-                        />
-                    </View>
-                    <Button 
-                        title = "Submit"
-                        onPress ={ () => authenticate()}
-                    />
-                </View>
-            </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
@@ -86,34 +86,26 @@ export default connect(mapStateToProps,mapDispatchToProps)(LoginScreen)
 
 const styles = StyleSheet.create({
     container: {
-        marginTop:30,
-        alignItems: "center",
+      flex: 1
     },
     errorContainer: {
         padding:6,
         height:'10%',
         alignItems: "center",
-        marginTop:30,
     },
-    form: {
-        width:'80%',
-        marginVertical: '20%',
-        marginBottom: 48,
-        marginHorizontal: 30,
+    inner: {
+      padding: 12,
+      flex: 1,
+      justifyContent: "space-around"
     },
-    inputContainer: {
-        flexDirection: 'row',
-        marginVertical: 20,
-        borderRadius: 1,
-        height: 45,
-        borderWidth: 1,
+    textInput: {
+      height: 40,
+      borderColor: "#000000",
+      borderBottomWidth: 1,
+      marginBottom: 36
     },
-    input: {
-        width:'100%',
-        padding:5,
-        height: 40,
-        fontSize: 15,
-        color: "#161F3D",
-        
-    },
-});
+    btnContainer: {
+      backgroundColor: "white",
+      marginTop: 4
+    }
+  });

@@ -1,12 +1,12 @@
 import React, { FC, useEffect,  useState} from 'react';
-import {Button, Image, StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {Button, Image, StyleSheet, Text, View, SafeAreaView, Dimensions} from 'react-native';
 import {RootStackParamList} from '../../Main'
 import { NativeStackScreenProps} from '@react-navigation/native-stack';
 import { allReducersState } from '../reducers/index'
 import * as actions from '../actions'
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch} from 'redux'
-
+import {useOrientation} from '../useOrientation'
 type PropsNav = NativeStackScreenProps<RootStackParamList,'ProfileScreen'>;
 type PropsRedux = {
     state: allReducersState,
@@ -16,10 +16,13 @@ type Props = PropsNav & PropsRedux
 
 
 const ProfileScreen:FC<Props> = (props) => {
+    const orientation = useOrientation();
 
     useEffect( () => {
         getUser()
     }, [])
+
+
 
 
     const getUser = () => {
@@ -36,7 +39,7 @@ const ProfileScreen:FC<Props> = (props) => {
             return (
                 <View style={styles.profileContainer}>
                     <Image                  
-                        style={{height:'70%', width:'90%'}}
+                        style={ orientation == 'PORTRAIT'? { height:'70%', width:'90%'}: {height:'60%', width:'100%'} }
                         source = {{uri: userObj.image}}
                     />
                     <Text style={styles.text}>{userObj.firstName} {userObj.lastName}</Text>
@@ -70,7 +73,7 @@ const ProfileScreen:FC<Props> = (props) => {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex:1}}>
             <View style= {styles.container}>
                 <View style={styles.header}>
                     <View style={styles.logoutButton}>
@@ -103,7 +106,6 @@ export default connect(mapStateToProps,mapDispatchToProps)(ProfileScreen)
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-
     },
     header: {
         borderBottomWidth:1,
@@ -117,9 +119,6 @@ const styles = StyleSheet.create({
         marginTop:10,
         alignItems: "center",
 
-    },
-    picture:{
-        flex:1,
     },
     text: {
         color:'#333333',

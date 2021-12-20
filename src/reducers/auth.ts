@@ -19,9 +19,8 @@ export const authReducer = (state = INITIALSTATE, action: { type: string, payloa
     switch(action.type) {
         case SET_AUTH:
             return {
-                ...state,
                 auth: action.payload.auth,
-                loading: false,
+                loading: action.payload.loading,
                 error: null,
             }
         case POST_AUTH_FAILURE:

@@ -25,11 +25,7 @@ export function getAuth() {
     return async function(dispatch:Dispatch) {
         try {
             const tokens = await storage.getTokens()
-
-            if(tokens)
-            tokens.token = ""
-
-            dispatch(setAuth({auth:tokens,loading:false,error:null}))
+            dispatch(setAuth({auth:tokens,loading:false,error:null})) 
         } catch(error) {
             const strError = `Error recieving from local storage auth tokens ${error}`
             dispatch(setAuth({auth:null,loading:false,error:strError}))
