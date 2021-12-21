@@ -12,7 +12,8 @@ type PropsRedux = {
     state: allReducersState,
     dispatchActions:typeof actions
 }
-type Props = PropsNav & PropsRedux
+export type Props = PropsNav & PropsRedux
+
 
 const LoginScreen:FC<Props> = (props) => {
     const [username, setUsername] = useState('');
@@ -20,7 +21,7 @@ const LoginScreen:FC<Props> = (props) => {
     let _usernameInput:TextInput|null;
     let _passwordInput:TextInput|null;
 
-    const authenticate = async () => {
+    const authenticate =  () => {
         props.dispatchActions.postAuth(username,password)
     }
 
@@ -83,6 +84,9 @@ export const mapDispatchToProps = (dispatch:Dispatch) => {
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(LoginScreen)
+
+//export {LoginScreen}
+
 
 const styles = StyleSheet.create({
     container: {

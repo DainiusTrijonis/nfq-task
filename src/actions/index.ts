@@ -12,8 +12,8 @@ export function postAuth(username:string, password:string) {
     return async function(dispatch:Dispatch) {
         try {
             const tokens = await api.postAuth(username,password)
-            await storage.setTokens(tokens)
             dispatch(setAuth({auth:tokens,loading:false,error:null}))
+            await storage.setTokens(tokens)
         } catch(error) {
             const strError = `${error}`
             dispatch(postAuthFailure({auth:null,loading:false,error:strError}))
@@ -59,8 +59,6 @@ export function getUser(auth:Auth) {
         } catch(error) {
             console.log(`${error}`)
             if(`Error: Invalid token - Unauthorised` == `${error}`) {
-                // Doing its job but showing typeError: dispatch(logout())
-                // Boilerplate occurs instead of that. Propably would be better extending Dispatch interface to implement action calling in Dispatch 
                 logoutFunction(dispatch)
             }
             else {

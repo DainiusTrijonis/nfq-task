@@ -7,6 +7,7 @@ import * as actions from '../actions'
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch} from 'redux'
 import {useOrientation} from '../useOrientation'
+
 type PropsNav = NativeStackScreenProps<RootStackParamList,'ProfileScreen'>;
 type PropsRedux = {
     state: allReducersState,
@@ -116,13 +117,11 @@ const styles = StyleSheet.create({
     profileContainer: {
         marginTop:10,
         alignItems: "center",
-
     },
     text: {
         color:'#333333',
         padding: 5,
     }
-
 });
 
 
